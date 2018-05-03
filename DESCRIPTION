@@ -5,7 +5,7 @@ Authors@R: person("Alexey", "Popov", email = "9141866@gmail.com", role = c("aut"
 Author: Alexey V. Popov
 Maintainer: Alexey V. Popov <9141866@gmail.com>
 Description: VSF Package contains routings for Scalar Spherical Harmonics (SPH) and Vector Spherical Harmonics (VSH) calculations.
-Depends: R (>= 3.4.1)
+Depends: R (>= 3.0.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
