@@ -4,8 +4,6 @@ test_that("LegendreTest", {
    L <- 36;
    dL <- pi/L;
 
-   # expect_that(LegendrePolinom(1,0,-pi/2 + 0*dL), equals(-1))
-
    for (i in 0:(L-1))
    {
       value <- LegendrePolinom(1,0,-pi/2 + i*dL);
@@ -62,7 +60,6 @@ test_that("VSphFuncKTest", {
       expect_that(VSphFuncSB_NKP(index$n[j],index$k[j],index$p[j],l[i],b[i], where = HEMISPHERE), equals(VSphFuncKTestDataSB_HS[j,i]))
       expect_that(VSphFuncTL_NKP(index$n[j],index$k[j],index$p[j],l[i],b[i], where = HEMISPHERE), equals(VSphFuncKTestDataTL_HS[j,i]))
 
-      # expect_that(SphFuncK_NKP(5,3,0,l,b, where = HEMISPHERE), equals(SphFuncKTestDataHS[7]))
     }
   }
 
