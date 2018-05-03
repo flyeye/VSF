@@ -1,0 +1,25 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# VSF Package 
+
+The goal of VSF package is to provide basic routings for the calculation of the Scalar Sherical Harmonics (SPH) and Vector Spherical Harmonics (VSH). Scalar and vector product routings also provided.
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+## basic example code
+```

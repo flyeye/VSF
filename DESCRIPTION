@@ -1,0 +1,16 @@
+Package: VSF
+Title: Scalar and Vector Spherical Harmonics (SPH and VSH)
+Version: 0.1.0.0000
+Authors@R: person("Alexey", "Popov", email = "9141866@gmail.com", role = c("aut", "cre"))
+Author: Alexey V. Popov
+Maintainer: Alexey V. Popov <9141866@gmail.com>
+Description: VSF Package contains routings for Scalar Spherical Harmonics (SPH) and Vector Spherical Harmonics (VSH) calculations.
+Depends: R (>= 3.4.1)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown, 
+    testthat
+VignetteBuilder: knitr
