@@ -77,11 +77,29 @@ LegendrePolinom <- function (n, k, b)
 }
 
 # ===================================================================
+#' Calculation combined index j from indexes n, k, p
+#'
+#' @param n - index, integer
+#' @param k - index, integer
+#' @param p - index, integer
+#'
+#' @return combined index j, integer
+#'
+#' @export
+#'
 GetJbyNKP <- function(n, k, p)
 {
   return ( n*n + 2*k + p - 1 )
 }
 # ===================================================================
+#' Calculation indexes n, k, p from combined index j
+#'
+#' @param combined index j, integer
+#'
+#' @return list with 3 indexes: n, k, p (integer)
+#'
+#' @export
+#'
 GetNKPbyJ <- function (j)
 {
   n <- floor( sqrt(j) );
@@ -170,6 +188,32 @@ SphFuncK_J <- function(j, l, b, where = WHOLE_SPHERE)
 
   return(result);
 }
+
+
+#' Calculate a spherical harmonic within a range from J = 0 to J = j given and with given (l, b)
+#'
+#' @param l - vector of longitudes
+#' @param b - vector of latitudes
+#' @param j - maximum combined index
+#'
+#' @return matrix of calculated spherical harmonics
+#'
+#' @export
+#'
+GetSphFuncK_matrix <- function(j, l, b)
+{
+
+  index <- GetNKPbyJ(0:j);
+  res <- matrix(0, nrow = length(l), ncol = length(index$n))
+
+  for (i in 1:length(index$n))
+  {
+    res[,i] <- SphFuncK_NKP(index$n[i], index$k[i], index$p[i], l, b);
+  }
+
+  return(res)
+}
+
 
 # ================================================================================
 #' Calculate the value of the tesseral vector spherical harmonic in longitude with index j in the point (l, b)
