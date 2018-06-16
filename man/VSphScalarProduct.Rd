@@ -4,7 +4,8 @@
 \alias{VSphScalarProduct}
 \title{Calculation a of the scalar product of the vector sperical harmonics with indexes i and j}
 \usage{
-VSphScalarProduct(i, j, what, where = WHOLE_SPHERE)
+VSphScalarProduct(i, j, what, where = WHOLE_SPHERE, FUN = function(l, b, i)
+  return(0))
 }
 \arguments{
 \item{i}{- index, integer}

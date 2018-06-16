@@ -471,7 +471,7 @@ FR <- function(l, b, i)
 #' @param j - index, integer
 #' @param where - flag, where the value must be calculated, 1 - whole sphere, 0 - hemisphere
 #'
-#'@export
+#' @export
 FScalarProduct <- function(i, j, where = WHOLE_SPHERE)
 {
   B <- 36;   dB <- pi/B;
@@ -502,6 +502,8 @@ FScalarProduct <- function(i, j, where = WHOLE_SPHERE)
 }
 
 # ==================================================================================
+
+
 #' Calculation a of the scalar product of the vector sperical harmonics with indexes i and j
 #'
 #' @param i - index, integer
@@ -509,8 +511,8 @@ FScalarProduct <- function(i, j, where = WHOLE_SPHERE)
 #' @param what - what kind of function must be used
 #' @param where - flag, where the value must be calculated, 1 - whole sphere, 0 - hemisphere
 #'
-
-#'@export
+#' @export
+#'
 VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE, FUN = function(l, b, i) return(0))
 {
   B <- 144;   dB <- pi/B;
@@ -562,7 +564,7 @@ VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE, FUN = function(l
       #        (Fi,Vi)
       value + (FR(lq, bq, i)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B)),
 
-      value + (FUN(lq, bq, i)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B)),
+      value + (FUN(lq, bq, i)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B))
 
       # #        (FOMi,Si)
       # 8: value + (FOgorodnikovMilnL(lq, bq, 1, i)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
@@ -584,16 +586,21 @@ VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE, FUN = function(l
     }
   }
 
+  return(value)
+}
+
   # ==================================================================================
-  #' Calculation a of the scalar product of the vector sperical harmonics with indexes i and j
+
+  #' Calculation a of the scalar product of the vector sperical harmonics with given field
   #'
   #' @param i - index, integer
-  #' @param j - index, integer
   #' @param what - what kind of function must be used
-  #' @param where - flag, where the value must be calculated, 1 - whole sphere, 0 - hemisphere
+  #' @param field -
   #'
-
-  #'@export
+  #' @return -
+  #'
+  #' @export
+  #'
   VSphScalarProductField <- function(i, what, field)
   {
 
@@ -619,8 +626,8 @@ VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE, FUN = function(l
 
                     value + field[q1,1]*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq)*cos(bq)*(2*pi*pi/(L*B))
         )
-      }
     }
+
 
   return(value);
 }
