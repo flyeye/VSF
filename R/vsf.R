@@ -536,7 +536,9 @@ VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE)
     {
       bq <- (pi/2) - dB*(q2+0.5);
 
-      bq2 <- asin(2*sin(bq)+1);
+      bq2 <- bq
+      if ( where == HEMISPHERE)
+        bq2 <- asin(2*sin(bq)+1);
 
       value <- switch(what,
       #        (Ti,Tj)
