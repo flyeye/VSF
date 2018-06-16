@@ -511,7 +511,7 @@ FScalarProduct <- function(i, j, where = WHOLE_SPHERE)
 #'
 
 #'@export
-VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE)
+VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE, FUN = function(l, b, i) return(0))
 {
   B <- 144;   dB <- pi/B;
   L <- 192;   dL <- 2*pi/L;
@@ -542,25 +542,27 @@ VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE)
 
       value <- switch(what,
       #        (Ti,Tj)
-      1: value + (VSphFuncTL_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncTL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
+      value + (VSphFuncTL_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncTL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
                              VSphFuncTB_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncTB_NKP(index2$n, index2$k, index2$p, lq, bq2))*cos(bq)*(2*pi*pi/(L*B)),
       #        (Si,Sj)
-      2: value + (VSphFuncSL_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
+      value + (VSphFuncSL_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
                             VSphFuncSB_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncSB_NKP(index2$n, index2$k, index2$p, lq, bq2))*cos(bq)*(2*pi*pi/(L*B)),
       #        (Vi,Vj)
-      3: value + (SphFuncK_NKP(index1$n, index1$k, index1$p, lq, bq2)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq2))*cos(bq)*(2*pi*pi/(L*B)),
+      value + (SphFuncK_NKP(index1$n, index1$k, index1$p, lq, bq2)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq2))*cos(bq)*(2*pi*pi/(L*B)),
 
       #        (Ti,Sj)
-      4: value + (VSphFuncTL_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
+      value + (VSphFuncTL_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
                              VSphFuncTB_NKP(index1$n, index1$k, index1$p, lq, bq2)*VSphFuncSB_NKP(index2$n, index2$k, index2$p, lq, bq2))*cos(bq)*(2*pi*pi/(L*B)),
       #        (Fi,Si)
-      5: value + (FL(lq, bq, i)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq) +
+      value + (FL(lq, bq, i)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq) +
                              FB(lq, bq, i)*VSphFuncSB_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B)),
       #        (Fi,Ti)
-      6: value + (FL(lq, bq, i)*VSphFuncTL_NKP(index2$n, index2$k, index2$p, lq, bq) +
+      value + (FL(lq, bq, i)*VSphFuncTL_NKP(index2$n, index2$k, index2$p, lq, bq) +
                              FB(lq, bq, i)*VSphFuncTB_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B)),
       #        (Fi,Vi)
-      7: value + (FR(lq, bq, i)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B))
+      value + (FR(lq, bq, i)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B)),
+
+      value + (FUN(lq, bq, i)*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq))*cos(bq)*(2*pi*pi/(L*B)),
 
       # #        (FOMi,Si)
       # 8: value + (FOgorodnikovMilnL(lq, bq, 1, i)*VSphFuncSL_NKP(index2$n, index2$k, index2$p, lq, bq2) +
@@ -581,6 +583,44 @@ VSphScalarProduct <- function(i, j, what, where = WHOLE_SPHERE)
       )
     }
   }
+
+  # ==================================================================================
+  #' Calculation a of the scalar product of the vector sperical harmonics with indexes i and j
+  #'
+  #' @param i - index, integer
+  #' @param j - index, integer
+  #' @param what - what kind of function must be used
+  #' @param where - flag, where the value must be calculated, 1 - whole sphere, 0 - hemisphere
+  #'
+
+  #'@export
+  VSphScalarProductField <- function(i, what, field)
+  {
+
+    value <- 0;
+
+    index1 <- GetNKPbyJ(i);
+
+
+    for (q1 in 0:nrow(field))
+    {
+
+      value <- switch(what,
+                    #        (Ti,Tj)
+                    #value + (VSphFuncTL_NKP(index1$n, index1$k, index1$p, lq, bq2)*field[q1,1] +
+#                               VSphFuncTB_NKP(index1$n, index1$k, index1$p, lq, bq2)*field[q1,2]),
+                    #        (Si,Sj)
+#                    value + (VSphFuncSL_NKP(index1$n, index1$k, index1$p, lq, bq2)*field[q1,1] +
+#                               VSphFuncSB_NKP(index1$n, index1$k, index1$p, lq, bq2)*field[q1,2]),
+                    #        (Vi,Vj)
+                    value + (SphFuncK_NKP(index1$n, index1$k, index1$p, lq, bq2)*field[q1,1]),
+
+                    value + (SphFuncK_NKP(index1$n, index1$k, index1$p, lq, bq2)*field[q1,2]),
+
+                    value + field[q1,1]*SphFuncK_NKP(index2$n, index2$k, index2$p, lq, bq)*cos(bq)*(2*pi*pi/(L*B))
+        )
+      }
+    }
 
   return(value);
 }
